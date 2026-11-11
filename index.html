@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graduation Invitation | Thiệp Mời Tốt Nghiệp</title>
-    <!-- Import Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* === BIẾN MÀU SẮC (THEME VARIABLES) === */
         :root {
             --pink-soft: #FADADD;
             --pink-main: #F4B6C2;
@@ -19,541 +17,357 @@
             --text-dark: #5c4a4f;
         }
 
-        /* === RESET & CƠ BẢN === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: linear-gradient(135deg, #FFF0F5 0%, var(--cream) 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            min-height: 100vh; display: flex;
+            justify-content: center; align-items: center;
             font-family: 'Be Vietnam Pro', sans-serif;
-            overflow: hidden; /* Ngăn scroll khi có hiệu ứng */
-            color: var(--text-dark);
+            overflow: hidden; color: var(--text-dark);
             perspective: 1200px;
         }
 
-        /* Hạt sáng li ti bay nhẹ (Particles) */
-        .particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: float-up linear infinite;
-        }
+        /* Hạt sáng nền */
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%; animation: float-up linear infinite; }
         @keyframes float-up {
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
             50% { opacity: 1; }
             100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
 
-        /* === ÂM THANH (AUDIO TOGGLE) === */
         .audio-btn {
-            position: fixed;
-            top: 20px; right: 20px;
-            background: var(--cream);
-            border: 2px solid var(--pink-main);
-            border-radius: 50%;
-            width: 40px; height: 40px;
-            cursor: pointer;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(232,155,176,0.2);
-            transition: all 0.3s ease;
+            position: fixed; top: 20px; right: 20px;
+            background: var(--cream); border: 2px solid var(--pink-main);
+            border-radius: 50%; width: 40px; height: 40px;
+            cursor: pointer; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; box-shadow: 0 4px 10px rgba(232,155,176,0.2); transition: all 0.3s;
         }
         .audio-btn:hover { transform: scale(1.1); }
 
-        /* === KHUNG 3D CHÍNH (SCENE) === */
-        .scene {
-            position: relative;
-            width: 90vw;
-            max-width: 420px;
-            height: 280px;
-            transform-style: preserve-3d;
-            transition: transform 0.1s; /* Dành cho parallax chuột */
-            z-index: 10;
-        }
+        .scene { position: relative; width: 90vw; max-width: 420px; height: 280px; transform-style: preserve-3d; transition: transform 0.1s; z-index: 10; }
+        .world { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; }
 
-        /* Group chứa toàn bộ phong bì và thiệp */
-        .world {
-            position: absolute;
-            width: 100%; height: 100%;
-            transform-style: preserve-3d;
-        }
-
-        /* === PHONG BÌ (ENVELOPE) === */
-        .env-part {
-            position: absolute;
-            width: 100%; height: 100%;
-            border-radius: 4px;
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .env-back {
-            background: var(--cream-2);
-            transform: translateZ(-2px);
-            box-shadow: 0 20px 60px rgba(232,155,176,0.25);
-        }
+        /* === PHONG BÌ === */
+        .env-part { position: absolute; width: 100%; height: 100%; border-radius: 4px; transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .env-back { background: var(--cream-2); transform: translateZ(-2px); box-shadow: 0 20px 60px rgba(232,155,176,0.25); }
         .env-front {
-            background: var(--cream);
-            transform: translateZ(5px);
-            /* Tạo hình dạng túi phong bì mặt trước */
+            background: var(--cream); transform: translateZ(5px);
             clip-path: polygon(0 100%, 0 0, 50% 55%, 100% 0, 100% 100%);
             border: 1px solid rgba(244, 182, 194, 0.3);
         }
         .env-flap {
-            background: var(--pink-soft);
-            height: 65%;
-            transform-origin: top;
-            transform: translateZ(6px) rotateX(0deg);
+            background: var(--pink-soft); height: 65%;
+            transform-origin: top; transform: translateZ(6px) rotateX(0deg);
             clip-path: polygon(0 0, 100% 0, 50% 100%);
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 20px;
-            cursor: pointer;
+            display: flex; justify-content: center; align-items: flex-end;
+            padding-bottom: 20px; cursor: pointer;
         }
-        
-        /* Seal sáp */
         .seal {
-            width: 45px; height: 45px;
-            background: var(--pink-deep);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
+            width: 45px; height: 45px; background: var(--pink-deep);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
             box-shadow: 0 4px 10px rgba(232, 155, 176, 0.5), inset 0 0 5px rgba(0,0,0,0.2);
-            position: absolute;
-            bottom: -10px; left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            transition: transform 0.3s;
+            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); z-index: 10; transition: transform 0.3s;
         }
         .env-flap:hover .seal { transform: translateX(-50%) scale(1.05); }
 
-        /* Text gợi ý */
         .hint {
-            position: absolute;
-            bottom: -40px; left: 0; width: 100%;
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--pink-deep);
-            animation: pulse 1.5s infinite;
-            pointer-events: none;
-            transition: opacity 0.5s;
+            position: absolute; bottom: -40px; left: 0; width: 100%; text-align: center;
+            font-family: 'Playfair Display', serif; font-style: italic; color: var(--pink-deep);
+            animation: pulse 1.5s infinite; pointer-events: none; transition: opacity 0.5s;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-3px); }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
 
-        /* === THIỆP (CARD) === */
+        /* === THIỆP GẤP ĐÔI (BI-FOLD CARD) === */
         .card-wrapper {
             position: absolute;
-            width: 90%; height: 130%; /* Cao hơn phong bì một chút */
-            left: 5%; bottom: 5px;
+            width: 90%; height: 92%; 
+            left: 50%; bottom: 3%;
+            transform: translateX(-50%) translateZ(1px);
             transform-style: preserve-3d;
-            transform: translateZ(1px); /* Nằm giữa mặt trước và sau phong bì */
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* Mượt và hơi nảy nhẹ */
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
         }
         
-        .card {
-            width: 100%; height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        .card-bifold {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Nửa bìa (Flap gập lên) */
+        .card-cover {
+            position: absolute; width: 100%; height: 100%;
+            transform-origin: top; 
+            transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+        /* Nửa đáy (Nằm dưới) */
+        .card-base { position: absolute; width: 100%; height: 100%; z-index: 1; }
 
         .card-face {
-            position: absolute;
-            width: 100%; height: 100%;
-            background: var(--cream);
-            border-radius: 12px;
-            backface-visibility: hidden;
-            box-shadow: 0 15px 40px rgba(232,155,176,0.15);
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            /* Phản chiếu nhẹ (Gloss overlay) */
-            overflow: hidden;
+            position: absolute; width: 100%; height: 100%; background: var(--cream);
+            border-radius: 8px; backface-visibility: hidden;
+            box-shadow: 0 10px 30px rgba(232,155,176,0.15);
+            display: flex; flex-direction: column; padding: 12px; overflow: hidden;
         }
         .card-face::after {
-            content: '';
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: linear-gradient(to bottom right, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
-            transform: rotate(30deg);
-            pointer-events: none;
+            transform: rotate(30deg); pointer-events: none;
         }
 
-        .card-back-face {
-            transform: rotateY(180deg);
-        }
+        /* Định hướng 3D cho các mặt giấy */
+        .card-front { transform: translateZ(1px); } 
+        .card-inside-top { transform: rotateX(180deg) translateZ(1px); } 
+        .card-inside-bottom { transform: translateZ(0); } 
 
-        /* Viền Gold Foil */
+        /* Viền Gold Foil & Trang trí */
         .card-border {
-            position: relative;
-            width: 100%; height: 100%;
-            border: 2px solid transparent;
-            border-radius: 8px;
+            position: relative; width: 100%; height: 100%; border: 2px solid transparent; border-radius: 6px;
             background: linear-gradient(var(--cream), var(--cream)) padding-box,
                         linear-gradient(135deg, var(--gold-rose) 0%, #FFF 30%, var(--gold-rose) 50%, #FFF 70%, var(--gold-rose) 100%) border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 15px; text-align: center;
         }
 
-        /* Nội dung mặt trước */
-        .decor-top { width: 50px; margin-bottom: 15px; }
-        .title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            color: var(--gold-rose);
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-        .subtitle {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(1rem, 4vw, 1.4rem);
-            color: var(--pink-deep);
-            margin-bottom: 25px;
-        }
-        .info-block {
-            font-size: clamp(0.85rem, 3vw, 1rem);
-            line-height: 1.8;
-            width: 100%;
-        }
-        .info-row {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .decor-top { width: 45px; margin-bottom: 10px; }
+        .title { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 4vw, 1.6rem); color: var(--gold-rose); margin-bottom: 5px; }
+        .subtitle { font-family: 'Dancing Script', cursive; font-size: clamp(1rem, 3.5vw, 1.3rem); color: var(--pink-deep); margin-bottom: 15px; }
+        .hint-open { font-size: 0.85rem; color: var(--pink-deep); font-style: italic; margin-top: 15px; animation: pulse 1.5s infinite; }
         
-        /* Hoa góc (SVG trang trí) */
-        .flower-corner {
-            position: absolute; width: 60px; height: 60px;
-            opacity: 0.85;
-        }
+        .info-block { font-size: clamp(0.8rem, 2.5vw, 0.95rem); line-height: 1.8; width: 100%; }
+        .info-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .message { font-size: clamp(0.8rem, 2.5vw, 0.9rem); line-height: 1.6; margin-bottom: 15px; }
+        .message-eng { font-style: italic; opacity: 0.8; margin-top: 5px; }
+        
+        .flower-corner { position: absolute; width: 50px; height: 50px; opacity: 0.85; }
         .flower-tl { top: -5px; left: -5px; transform: rotate(0deg); }
         .flower-br { bottom: -5px; right: -5px; transform: rotate(180deg); }
 
-        /* Nội dung mặt sau */
-        .message {
-            font-size: clamp(0.85rem, 3vw, 0.95rem);
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        .message-eng {
-            font-style: italic; opacity: 0.8; margin-top: 8px;
-        }
         .rsvp-btn {
-            background: var(--pink-soft);
-            color: var(--text-dark);
-            border: 1px solid var(--gold-rose);
-            padding: 10px 24px;
-            border-radius: 20px;
-            font-family: 'Be Vietnam Pro', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(244, 182, 194, 0.4);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 20;
+            background: var(--pink-soft); color: var(--text-dark); border: 1px solid var(--gold-rose);
+            padding: 8px 20px; border-radius: 20px; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(244, 182, 194, 0.4);
+            margin-bottom: 15px; position: relative; z-index: 20; pointer-events: none; 
         }
-        .rsvp-btn:hover {
-            transform: scale(1.05);
-            background: var(--pink-main);
-            color: white;
-            box-shadow: 0 0 15px var(--gold-rose);
-        }
-        .signature {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
-            color: var(--pink-deep);
-        }
-        .sign-name { font-size: 1.8rem; color: var(--gold-rose); margin-top: -5px; }
+        .is-open .rsvp-btn { pointer-events: auto; } 
+        .rsvp-btn:hover { transform: scale(1.05); background: var(--pink-main); color: white; box-shadow: 0 0 15px var(--gold-rose); }
+        
+        .signature { font-family: 'Dancing Script', cursive; font-size: 1.2rem; color: var(--pink-deep); line-height: 1.2;}
+        .sign-name { font-size: 1.6rem; color: var(--gold-rose); margin-top: 0px; }
 
-        /* === HIỆU ỨNG ANIMATION STATES === */
-        /* Bước 1: Mở nắp */
+        /* === TRÌNH TỰ ANIMATION === */
         .is-opening .env-flap { transform: translateZ(6px) rotateX(180deg); z-index: 1;}
         .is-opening .hint { opacity: 0; }
         
-        /* Bước 2: Thiệp trượt lên */
-        .is-sliding .card-wrapper { transform: translateY(-110%) translateZ(1px); }
+        /* 1. Trượt nguyên tờ giấy ra khỏi phong bì */
+        .is-sliding .card-wrapper { transform: translate(-50%, -115%) translateZ(1px); }
         
-        /* Bước 3: Phong bì ẩn đi, thiệp ra giữa */
+        /* 2. Phong bì biến mất, thiệp di chuyển ra giữa màn hình */
         .is-showing .env-part { transform: translateY(150px) translateZ(-50px); opacity: 0; }
-        .is-showing .card-wrapper { 
-            transform: translateY(0) translateZ(80px) scale(1.15); 
-            /* Căn lại vị trí do height thiệp khác envelope */
-            bottom: auto; top: 50%;
-            margin-top: -65%; /* 50% của chiều cao thiệp */
-        }
+        .is-showing .card-wrapper { bottom: auto; top: 50%; transform: translate(-50%, -50%) translateZ(80px) scale(1.1); }
         
-        /* Bước 4: Lật thiệp */
-        .is-flipped .card { transform: rotateY(180deg); }
+        /* 3. Khi click mở tờ giấy (Mở gập lên trên) */
+        .is-open .card-cover { transform: rotateX(180deg); }
+        .is-open .card-bifold { transform: translateY(50%); }
+        .is-open .hint-open { display: none; }
 
-        /* === CONFETTI === */
-        .petal {
-            position: fixed; top: -20px; width: 15px; height: 15px;
-            background: var(--pink-soft);
-            border-radius: 50% 0 50% 50%; /* Hình cánh hoa */
-            pointer-events: none; z-index: 99;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { transform: translateY(105vh) rotate(720deg); }
-        }
+        .petal { position: fixed; top: -20px; width: 15px; height: 15px; background: var(--pink-soft); border-radius: 50% 0 50% 50%; pointer-events: none; z-index: 99; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
 
-        /* Fallback 2D nếu không hỗ trợ 3D */
         @supports not (transform-style: preserve-3d) {
-            .scene, .world, .card-wrapper, .card { transform: none !important; transition: none !important; }
-            .env-flap { display: none; }
-            .card-wrapper { bottom: 20px; z-index: 100; }
+            .scene, .world, .card-wrapper, .card-bifold { transform: none !important; transition: none !important; }
+            .env-flap { display: none; } .card-wrapper { bottom: 20px; z-index: 100; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Audio Control -->
     <button class="audio-btn" id="audioBtn" title="Bật/Tắt Nhạc">🎵</button>
-    <audio id="bgMusic" loop>
-        <!-- Nhạc Lofi nhẹ nhàng, link public demo -->
-        <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Nền hạt sáng -->
+    <audio id="bgMusic" loop><source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg"></audio>
     <div class="particles" id="particles"></div>
 
     <div class="scene" id="scene">
         <div class="world" id="world">
-            
-            <!-- Mặt sau phong bì -->
             <div class="env-part env-back"></div>
 
-            <!-- Thiệp -->
+            <!-- THIỆP GẤP ĐÔI -->
             <div class="card-wrapper" id="cardWrapper">
-                <div class="card" id="card">
-                    <!-- MẶT TRƯỚC THIỆP -->
-                    <div class="card-face">
-                        <div class="card-border">
-                            <!-- SVG Cánh hoa góc Trái trên -->
-                            <svg class="flower-corner flower-tl" viewBox="0 0 100 100">
-                                <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/> <!-- Lá -->
-                                <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/>
-                                <circle cx="60" cy="30" r="15" fill="var(--pink-main)"/>
-                                <circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
-                            </svg>
-                            <!-- SVG Mũ tốt nghiệp & Ribbon -->
-                            <svg class="decor-top" viewBox="0 0 64 64" fill="var(--gold-rose)">
-                                <path d="M32 8 L6 20 L32 32 L58 20 Z" fill="var(--gold-rose)"/>
-                                <path d="M16 25 V40 C16 45, 48 45, 48 40 V25 Z" fill="var(--pink-soft)"/>
-                                <path d="M54 22 V42 L58 46 V20 Z" fill="var(--gold-rose)"/>
-                            </svg>
-                            
-                            <h1 class="title">THIỆP MỜI<br>TỐT NGHIỆP</h1>
-                            <p class="subtitle">Graduation Invitation</p>
-                            
-                            <div class="info-block">
-                                <div class="info-row">
-                                    <span>📅</span> Chủ Nhật, 06.12.2026
+                <div class="card-bifold" id="card">
+                    
+                    <!-- 1. NỬA DƯỚI (Mặt trong đáy thiệp) -->
+                    <div class="card-base">
+                        <div class="card-face card-inside-bottom">
+                            <div class="card-border">
+                                <svg class="flower-corner flower-tl" viewBox="0 0 100 100">
+                                    <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/>
+                                    <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/><circle cx="60" cy="30" r="15" fill="var(--pink-main)"/><circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
+                                </svg>
+                                
+                                <div class="message">
+                                    <p>Trân trọng kính mời bạn đến chung vui trong lễ tốt nghiệp của mình.</p>
+                                    <p>Sự hiện diện của bạn là món quà vô giá trong ngày đặc biệt này!</p>
+                                    <p class="message-eng">Please join us to celebrate this special milestone.</p>
                                 </div>
-                                <div class="info-row" style="margin: 8px 0;">
-                                    <span>📍</span> BUV Campus, Ecopark
+                                <button class="rsvp-btn" id="rsvpBtn">Xác nhận tham dự</button>
+                                <div class="signature">
+                                    <p>With love,</p>
+                                    <p class="sign-name">Châu Khánh Vy aka Tuti</p>
                                 </div>
-                                <div class="info-row">
-                                    <span>📸</span> Picture time: 11:30 – 14:00
-                                </div>
-                            </div>
 
-                            <!-- SVG Cánh hoa góc Phải dưới -->
-                            <svg class="flower-corner flower-br" viewBox="0 0 100 100">
-                                <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/>
-                                <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/>
-                                <circle cx="60" cy="30" r="15" fill="var(--pink-main)"/>
-                                <circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
-                            </svg>
+                                <svg class="flower-corner flower-br" viewBox="0 0 100 100">
+                                    <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/>
+                                    <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/><circle cx="60" cy="30" r="15" fill="var(--pink-main)"/><circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- MẶT SAU THIỆP -->
-                    <div class="card-face card-back-face">
-                        <div class="card-border">
-                            <div class="message">
-                                <p>Trân trọng kính mời bạn đến chung vui trong lễ tốt nghiệp của mình.</p>
-                                <p>Sự hiện diện của bạn là món quà vô giá trong ngày đặc biệt này!</p>
-                                <p class="message-eng">Please join us to celebrate this special milestone.</p>
+                    <!-- 2. NỬA TRÊN (Bìa thiệp, sẽ gập lên) -->
+                    <div class="card-cover">
+                        <!-- Mặt trong của bìa (hiện ra khi lật lên) -->
+                        <div class="card-face card-inside-top">
+                            <div class="card-border">
+                                <svg class="flower-corner flower-tl" viewBox="0 0 100 100">
+                                    <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/>
+                                    <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/><circle cx="60" cy="30" r="15" fill="var(--pink-main)"/><circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
+                                </svg>
+
+                                <div class="info-block">
+                                    <div class="info-row"><span>📅</span> Chủ Nhật, 06.12.2026</div>
+                                    <div class="info-row" style="margin: 15px 0;"><span>📍</span> BUV Campus, Ecopark</div>
+                                    <div class="info-row"><span>📸</span> Picture time: 11:30 – 14:00</div>
+                                </div>
+
+                                <svg class="flower-corner flower-br" viewBox="0 0 100 100">
+                                    <path d="M50,50 Q30,10 10,50 Q30,90 50,50" fill="#a8e6cf" opacity="0.6"/>
+                                    <circle cx="40" cy="40" r="20" fill="var(--pink-soft)"/><circle cx="60" cy="30" r="15" fill="var(--pink-main)"/><circle cx="45" cy="50" r="12" fill="var(--pink-deep)"/>
+                                </svg>
                             </div>
-                            
-                            <button class="rsvp-btn" id="rsvpBtn">Xác nhận tham dự</button>
-                            
-                            <div class="signature">
-                                <p>With love,</p>
-                                <p class="sign-name">'Châu Khánh Vy <333'<'Châu Khánh Vy <333'/p> <!-- Sửa tên bạn tại đây -->
+                        </div>
+
+                        <!-- Mặt ngoài cùng của bìa (hiện ra đầu tiên) -->
+                        <div class="card-face card-front">
+                            <div class="card-border">
+                                <svg class="decor-top" viewBox="0 0 64 64" fill="var(--gold-rose)">
+                                    <path d="M32 8 L6 20 L32 32 L58 20 Z" fill="var(--gold-rose)"/>
+                                    <path d="M16 25 V40 C16 45, 48 45, 48 40 V25 Z" fill="var(--pink-soft)"/>
+                                    <path d="M54 22 V42 L58 46 V20 Z" fill="var(--gold-rose)"/>
+                                </svg>
+                                <h1 class="title">THIỆP MỜI<br>TỐT NGHIỆP</h1>
+                                <p class="subtitle">Graduation Invitation</p>
+                                <div class="hint-open">Nhấn để mở thiệp 💌</div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- Mặt trước túi phong bì -->
             <div class="env-part env-front"></div>
-
-            <!-- Nắp phong bì -->
             <div class="env-part env-flap" id="flap">
                 <div class="seal">
-                    <!-- Icon trái tim trên seal -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                 </div>
             </div>
-
         </div>
-        <div class="hint" id="hint">Nhấn để mở thiệp 💌</div>
+        <div class="hint" id="hint">Nhấn để mở phong bì 💌</div>
     </div>
 
-    <!-- Script xử lý Logic & Hiệu ứng -->
     <script>
-        // Khởi tạo hạt sáng nền
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 30; i++) {
             let p = document.createElement('div');
             p.className = 'particle';
             let size = Math.random() * 4 + 2;
-            p.style.width = size + 'px';
-            p.style.height = size + 'px';
+            p.style.width = size + 'px'; p.style.height = size + 'px';
             p.style.left = Math.random() * 100 + 'vw';
             p.style.animationDuration = (Math.random() * 10 + 5) + 's';
             p.style.animationDelay = (Math.random() * 5) + 's';
             particlesContainer.appendChild(p);
         }
 
-        // Logic Mở thiệp
         const world = document.getElementById('world');
         const flap = document.getElementById('flap');
         const cardWrapper = document.getElementById('cardWrapper');
-        const card = document.getElementById('card');
         const rsvpBtn = document.getElementById('rsvpBtn');
-        let state = 0; // 0: Đóng, 1: Đang mở, 2: Hiện thiệp, 3: Lật
+        let state = 0; 
 
-        // Web Audio API Synth (Tiếng "Whoosh" nhẹ khi mở thiệp để ko cần load file ngoài)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playWhoosh() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.5);
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
             gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
         }
 
-        // Tạo hiệu ứng cánh hoa rơi (Confetti)
         function shootConfetti() {
             const colors = ['#FADADD', '#F4B6C2', '#FFF8F0', '#D4A373'];
             for(let i = 0; i < 60; i++) {
                 let petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.style.left = Math.random() * 100 + 'vw';
+                petal.className = 'petal'; petal.style.left = Math.random() * 100 + 'vw';
                 petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 petal.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
                 petal.style.animationDelay = (Math.random() * 0.5) + 's';
-                // Tạo độ xoay ngẫu nhiên
                 petal.style.transform = `rotate(${Math.random() * 360}deg)`;
                 document.body.appendChild(petal);
-                // Dọn rác DOM
                 setTimeout(() => petal.remove(), 6000);
             }
         }
 
-        // Tương tác Mở Phong Bì
         flap.addEventListener('click', (e) => {
             e.stopPropagation();
             if (state !== 0) return;
-            state = 1;
-            playWhoosh();
-            
+            state = 1; playWhoosh();
             world.classList.add('is-opening');
             
-            // Đợi nắp mở xong -> trượt thiệp lên
-            setTimeout(() => {
-                world.classList.add('is-sliding');
-            }, 600);
-
-            // Đợi thiệp trượt lên -> vứt phong bì, thiệp bay ra trước
-            setTimeout(() => {
-                world.classList.add('is-showing');
-                state = 2;
-            }, 1600);
-
-            // Bắn pháo giấy hoa hồng khi thiệp vừa ra giữa
-            setTimeout(() => {
-                shootConfetti();
-            }, 2200);
+            setTimeout(() => { world.classList.add('is-sliding'); }, 600);
+            setTimeout(() => { world.classList.add('is-showing'); state = 2; }, 1600);
+            setTimeout(() => { shootConfetti(); }, 2200);
         });
 
-        // Tương tác Lật Thiệp
+        // Xử lý mở giấy gập đôi
         cardWrapper.addEventListener('click', () => {
-            if (state < 2) return;
-            cardWrapper.classList.toggle('is-flipped');
-            state = cardWrapper.classList.contains('is-flipped') ? 3 : 2;
+            if (state < 2) return; // Đợi thiệp ra giữa màn hình mới cho bấm mở
+            cardWrapper.classList.toggle('is-open');
         });
 
-        // Nút RSVP (Ngăn chặn việc lật thiệp khi nhấn nút)
         rsvpBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             alert('Cảm ơn bạn đã xác nhận tham dự! 💕');
-            // Bạn có thể chèn link Google Form vào đây bằng: window.open("LINK_CỦA_BẠN", "_blank");
         });
 
-        // Nhạc nền (Tắt/Bật)
         const audioBtn = document.getElementById('audioBtn');
         const bgMusic = document.getElementById('bgMusic');
         let isPlaying = false;
         audioBtn.addEventListener('click', () => {
             if(isPlaying) {
-                bgMusic.pause();
-                audioBtn.innerHTML = '🎵';
-                audioBtn.style.borderColor = 'var(--pink-main)';
+                bgMusic.pause(); audioBtn.innerHTML = '🎵'; audioBtn.style.borderColor = 'var(--pink-main)';
             } else {
                 bgMusic.play().catch(e => console.log("Trình duyệt chặn Autoplay"));
-                audioBtn.innerHTML = '🔊';
-                audioBtn.style.borderColor = 'var(--gold-rose)';
+                audioBtn.innerHTML = '🔊'; audioBtn.style.borderColor = 'var(--gold-rose)';
             }
             isPlaying = !isPlaying;
         });
 
-        // Parallax theo chuột (Chỉ bật trên thiết bị có chuột)
         if (window.matchMedia("(hover: hover)").matches) {
             const scene = document.getElementById('scene');
             window.addEventListener('mousemove', (e) => {
-                // Giới hạn parallax khi đang lật thiệp hoặc thiệp đã mở to để tránh rối
                 if (state >= 2) return; 
                 let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
                 let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
                 scene.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
-            // Reset khi chuột rời đi
             window.addEventListener('mouseleave', () => {
                 if (state < 2) scene.style.transform = `rotateY(0deg) rotateX(0deg)`;
             });
